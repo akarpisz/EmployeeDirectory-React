@@ -1,25 +1,42 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from "react";
+import "./App.css";
+import API from "./utils/API";
+import Header from "./components/Header";
+import userContext from "./utils/userContext";
+import Main from "./components/Main";
+import Results from "./components/Results";
+import { Container } from "reactstrap";
 
 function App() {
+  const [userState, setUsers] = useState({ users: [], search: "", sorted: [] });
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    const apiCall = async () => {
+      let { data } = await API.callUsers();
+console.log(data.results);
+      setUsers({ ...userState, users: Object.entries(data.results) });
+    };
+    apiCall();
+  }, []); //dep array needs to stay empty or it makes millions of api calls >:(
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    console.log(name, " ", value);
+    setUsers({
+      ...userState,
+      [name]: value,
+    });
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Container className="App">
+      <Header />
+      <userContext.Provider value={userState}>
+        <Main handleInputChange={handleInputChange} />
+        <Results />
+      </userContext.Provider>
+    </Container>
   );
 }
 
