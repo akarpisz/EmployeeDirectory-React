@@ -8,14 +8,14 @@ import Results from "./components/Results";
 import { Container } from "reactstrap";
 
 function App() {
-  const [userState, setUsers] = useState({ users: [], search: "", sorted: [] });
+  const [userState, setUsers] = useState({ users: [], search: "" });
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     const apiCall = async () => {
       let { data } = await API.callUsers();
-console.log(data.results);
-      setUsers({ ...userState, users: Object.entries(data.results) });
+      console.log(data.results);
+      setUsers({ ...userState, users: data.results });
     };
     apiCall();
   }, []); //dep array needs to stay empty or it makes millions of api calls >:(

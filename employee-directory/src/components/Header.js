@@ -5,7 +5,7 @@ import { Jumbotron, Row, Col } from "reactstrap";
 const Header = () => {
   return (
     <Row>
-      <Col md={12}>
+      <Col md={12} xs={12}>
       <Jumbotron className="text-center">Employee Directory</Jumbotron>
       </Col>
     </Row>
